@@ -1,0 +1,63 @@
+多表查询
+select score.score from student join score on student.id = score.student_id and name = '许仙';
+
+select score.score from student,score where student.id = score.student_id and name = '许仙';
+
+select student.id, score.student_id ,score.score from student,score where student.id = score.student_id;
+
+select student.name , student.id, score.student_id, score.score
+from student,score 
+where student.id = score.student_id and student.name ='许仙' ;
+
+select student.id ,student.sn, student.name, student.qq_mail, student.classes_id, sum(score.score)
+ from student join score on studen.id = score.student_id
+ group by score.student_id;
+
+select student.id, student.name, score.student_id, sum(score.score) 
+from student,score 
+where student.id = score.student_id group by score.student_id;
+
+select student.id, student.name, score.score, course.name
+from student, score, course
+where student.id = score.student_id and score.course_id = course.id;
+
+子查询
+select classes_id from student
+where name = '不想毕业';
+select name from student where classes_id = 1;
+
+上面这两个操作利用子查询就是下面的代码:
+
+select name from student where classes_id = (
+select  classes_id from student where name = '不想毕业'
+);
+
+多行子查询
+select score from score where course_id   in (
+ select id from course where name = '语文' or name = '英文' );//适用于子查询结果比较少的情况
+
+select * from score 
+where exists (
+select score.course_id from course
+where (name = '语文' or name = '英文')
+and course.id = score.course_id
+);//适用于子查询结果比较多的情况
+
+合并查询
+select * from course 
+where id < 3 or name = '英文';
+
+上面的这个操作利用联合查询就是下面的操作:
+
+select * from course 
+where id < 3 
+union      //该操作符用于取得两个结果集的并集。当使用该操作符时，会自动去掉结果集中的重复行。
+select * from course 
+where name = '英文';//用union的时候需要保证列数能够匹配,对表的名字没有要求
+
+select * from course 
+where id < 3 
+union all     //该操作符用于取得两个结果集的并集。当使用该操作符时，不会去掉结果集中的重复行
+select * from course 
+where name = '英文';
+
