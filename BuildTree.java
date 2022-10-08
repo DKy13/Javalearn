@@ -37,6 +37,7 @@ public class BuildTree {
         }
 
         public TreeNode buildTree(int[] preorder, int[] inorder) {
+            System.out.println("尝试git");
             int n = preorder.length;
             // 构造哈希映射，帮助我们快速定位根节点
             indexMap = new HashMap<Integer, Integer>();
